@@ -11,6 +11,7 @@ import { TeamListComponent } from './components/team/team-list-component/team-li
 import { TournamentFormComponent } from './components/tournament/tournament-form-component/tournament-form-component';
 import { TournamentListComponent } from './components/tournament/tournament-list-component/tournament-list-component';
 import { HomeComponent } from './components/home-component/home-component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { HomeComponent } from './components/home-component/home-component';
     TournamentListComponent,
     HomeComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, NgbModule],
+  imports: [BrowserModule, AppRoutingModule, NgbModule, ReactiveFormsModule],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],
 })
