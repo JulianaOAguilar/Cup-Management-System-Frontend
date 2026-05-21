@@ -1,4 +1,4 @@
-export interface Tourtnament {
+export interface Tournament {
   id: number;
   fifaCode1: string;
   fifaCode2: string;

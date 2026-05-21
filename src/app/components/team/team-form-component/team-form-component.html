@@ -8,19 +8,19 @@
     <!-- CONTAINER DO FORM -->
     <div class="bg-light border rounded p-4 rounded-2 shadow">
 
-        <form>
+        <form [formGroup]="formGroupTeams">
 
             <!-- LINHA 1 -->
             <div class="row mb-3">
 
                 <div class="col-md-6">
                     <label class="form-label">Country Name</label>
-                    <input type="text" class="form-control" placeholder="Enter country name">
+                    <input type="text" formControlName="country" class="form-control" placeholder="Enter country name">
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Coach Name</label>
-                    <input type="text" class="form-control" placeholder="Enter coach name">
+                    <input type="text" formControlName="coach" class="form-control" placeholder="Enter coach name">
                 </div>
 
             </div>
@@ -32,20 +32,20 @@
 
                 <div class="col-md-6">
                     <label class="form-label">FIFA Code</label>
-                    <input type="text" class="form-control" placeholder="Enter FIFA code">
+                    <input type="text" formControlName="fifaCode" class="form-control" placeholder="Enter FIFA code">
                 </div>
 
 
                 <div class="col-md-6">
                     <label class="form-label">Players Quantity</label>
-                    <input type="number" class="form-control" placeholder="Enter number of players">
+                    <input type="number" formControlName="playersQuantity" class="form-control" placeholder="Enter number of players">
                 </div>
 
             </div>
 
             <!-- BOTÃO CENTRALIZADO -->
             <div class="d-flex justify-content-center mt-5">
-                <button type="submit" class="btn btn-outline-green-custom px-4">
+                <button (click)="save()" type="submit" class="btn btn-outline-green-custom px-4">
                     Register Team
                 </button>
             </div>

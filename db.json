@@ -1,0 +1,38 @@
+{
+  "teams": [
+    {
+      "id": 1,
+      "country": "Brazil",
+      "fifaCode": "BRA",
+      "Coach": "sla",
+      "playersQuantity": 26
+    }
+  ],
+  "tournaments": [
+    {
+      "id": 1,
+      "fifaCode1": "BRA",
+      "fifaCode2": "ARG",
+      "location": "sla",
+      "date": 26,
+      "time": "5:00 AM",
+      "local": "Av rui Barbosa"
+    },
+    {
+      "id": 2,
+      "fifaCode1": "BRA",
+      "fifaCode2": "yuyuyiu",
+      "location": "",
+      "date": "yuiyuiyui",
+      "time": "yuiyuyi"
+    },
+    {
+      "id": 3,
+      "fifaCode1": "uiu",
+      "fifaCode2": "uoioiui",
+      "location": "uoioiu",
+      "date": "iuoui",
+      "time": "uoiiu"
+    }
+  ]
+}
