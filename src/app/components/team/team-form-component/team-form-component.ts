@@ -1,5 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { Team } from '../../../models/TeamInterface';
 import { TeamService } from '../../../services/team-service';
 
@@ -11,38 +13,78 @@ import { TeamService } from '../../../services/team-service';
 })
 export class TeamFormComponent implements OnInit {
 
-
+  isEditMode = false;
+  teamId?: number;
 
   Teams = signal<Team[]>([]);
-  formGroupTeams: FormGroup; // criando um formGroup
-  
-  constructor(private formBuilder: FormBuilder, private service: TeamService) { //usa injeção de dependências para
-  //utilizar o formbuilder dentro do constructor
 
-  this.formGroupTeams = formBuilder.group({ // constroi o objeto Product, de acordo com
-  //sua interface já definida
-    id: [''],
-    country: [''],
-    fifaCode: [''],
-    coach: [''],
-    playersQuantity: ['']
+  formGroupTeams: FormGroup;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private service: TeamService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+
+    this.formGroupTeams = this.formBuilder.group({
+      id: [''],
+      country: [''],
+      fifaCode: [''],
+      coach: [''],
+      playerQuantity: ['']
     });
 
   }
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
-save() {
 
-    this.service.save(this.formGroupTeams.value).subscribe(
-      {
-        next: json => {
-          this.Teams.update(t => [...t, json]); // atualiza o Signal
-          this.formGroupTeams.reset(); // reseta o form
+    const idParam = this.route.snapshot.paramMap.get('id');
+
+    if (idParam) {
+
+      this.teamId = Number(idParam);
+      this.isEditMode = true;
+
+      this.service.getById(this.teamId).subscribe({
+        next: (team: Team) => {
+          this.formGroupTeams.patchValue(team);
+        },
+        error: (err) => {
+          console.error('Erro ao buscar time:', err);
         }
-      }
-    )}
- 
+      });
+
+    }
+  }
+
+  save(): void {
+
+    if (this.isEditMode) {
+
+      this.service.update(this.teamId!, this.formGroupTeams.value).subscribe({
+        next: () => {
+          console.log('Time atualizado com sucesso');
+          this.router.navigate(['/teams']);
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar:', err);
+        }
+      });
+
+    } else {
+
+      this.service.save(this.formGroupTeams.value).subscribe({
+        next: (json: Team) => {
+          this.Teams.update(t => [...t, json]);
+          this.formGroupTeams.reset();
+          
+        },
+        error: (err) => {
+          console.error('Erro ao salvar:', err);
+        }
+      });
+
+    }
+  }
 }
-
-

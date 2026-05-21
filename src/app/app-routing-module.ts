@@ -13,9 +13,12 @@ const routes: Routes = [
 
   { path: 'teams', component: TeamListComponent },
   { path: 'teams/new', component: TeamFormComponent },
+  { path: 'teams/edit/:id', component: TeamFormComponent },
+
 
   { path: 'tournaments', component: TournamentListComponent },
   { path: 'tournaments/new', component: TournamentFormComponent },
+  { path: 'tournaments/edit/:id', component: TournamentFormComponent }
 ];
 
 @NgModule({

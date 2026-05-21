@@ -2,7 +2,8 @@
 
     <!-- TÍTULO -->
     <h2 class="text-green-custom text-center fw-bold mb-3">
-        Register New Tournament
+          {{ isEditMode ? 'Edit Tournament' : ' Register New Tournament' }}
+
     </h2>
 
     <!-- CONTAINER DO FORM -->
@@ -49,7 +50,8 @@
             <!-- BOTÃO CENTRALIZADO -->
             <div class="d-flex justify-content-center mt-5">
                 <button (click)="save()" type="submit" class="btn btn-outline-green-custom px-4">
-                    Register Tournament
+  {{ isEditMode ? 'Edit Tournament' : ' Register Tournament' }}
+
                 </button>
             </div>
 

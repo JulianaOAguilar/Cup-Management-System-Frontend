@@ -12,9 +12,21 @@ export class TournamentService {
 
   constructor(private http: HttpClient) { }
 
-  getAllTeams(): Observable<Tournament[]>{
+  getAllTournaments(): Observable<Tournament[]>{
     return this.http.get<Tournament[]>(this.apiUrl);
   }
+    delete(tournament: Tournament): Observable<void> { // DELETE (DELETE/excluir)
+    return this.http.delete<void>(`${this.apiUrl}/${tournament.id}`);
+  }
+
+     update(id: number, tournament: Tournament): Observable<Tournament> {
+      return this.http.put<Tournament>(`${this.apiUrl}/${id}`, tournament);
+    }
+  
+      getById(id: number): Observable<Tournament> {
+      return this.http.get<Tournament>(`${this.apiUrl}/${id}`);
+    }
+  
 
     save(tournament: Tournament): Observable<Tournament> { // POST (CREATE/criar)
     return this.http.post<Tournament>(this.apiUrl, tournament);

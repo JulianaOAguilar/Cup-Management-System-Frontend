@@ -2,6 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TournamentService } from '../../../services/tournament-service';
 import { Tournament } from '../../../models/TournamentInterface';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-tournament-form-component',
@@ -11,14 +13,19 @@ import { Tournament } from '../../../models/TournamentInterface';
 })
 export class TournamentFormComponent implements OnInit {
 
+  isEditMode = false;
+  tournamentId?: number;
+
   Tournaments = signal<Tournament[]>([]);
   formGroupTournaments: FormGroup; // criando um formGroup
   
-  constructor(private formBuilder: FormBuilder, private service: TournamentService) { //usa injeção de dependências para
+  constructor(private formBuilder: FormBuilder, 
+    private service: TournamentService,
+     private route: ActivatedRoute,
+    private router: Router) { //usa injeção de dependências para
   //utilizar o formbuilder dentro do constructor
 
-  this.formGroupTournaments = formBuilder.group({ // constroi o objeto Product, de acordo com
-  //sua interface já definida
+  this.formGroupTournaments = formBuilder.group({ 
     id: [''],
     fifaCode1: [''],
     fifaCode2: [''],
@@ -28,21 +35,53 @@ export class TournamentFormComponent implements OnInit {
     });
 
   }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
-save() {
+   ngOnInit(): void {
+ 
+     const idParam = this.route.snapshot.paramMap.get('id');
+ 
+     if (idParam) {
+ 
+       this.tournamentId = Number(idParam);
+       this.isEditMode = true;
+ 
+       this.service.getById(this.tournamentId).subscribe({
+         next: (tournament: Tournament) => {
+           this.formGroupTournaments.patchValue(tournament);
+         },
+         error: (err) => {
+           console.error('Erro ao buscar time:', err);
+         }
+       });
+ 
+     }
+   }
+  save(): void {
 
-    this.service.save(this.formGroupTournaments.value).subscribe(
-      {
-        next: json => {
-          this.Tournaments.update(t => [...t, json]); // atualiza o Signal
-          this.formGroupTournaments.reset(); // reseta o form
+    if (this.isEditMode) {
+
+      this.service.update(this.tournamentId!, this.formGroupTournaments.value).subscribe({
+        next: () => {
+          console.log('Torneio atualizado com sucesso');
+          this.router.navigate(['/tournaments']);
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar:', err);
         }
-      }
-    )}
+      });
 
+    } else {
 
+      this.service.save(this.formGroupTournaments.value).subscribe({
+        next: (json: Tournament) => {
+          this.Tournaments.update(t => [...t, json]);
+          this.formGroupTournaments.reset();
+          
+        },
+        error: (err) => {
+          console.error('Erro ao salvar:', err);
+        }
+      });
 
-
+    }
+  }
 }

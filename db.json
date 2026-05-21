@@ -1,11 +1,11 @@
 {
   "teams": [
     {
-      "id": 1,
-      "country": "Brazil",
-      "fifaCode": "BRA",
-      "Coach": "sla",
-      "playersQuantity": 26
+      "id": 2,
+      "country": "France",
+      "fifaCode": "FRA",
+      "coach": "Rodolfo Ari",
+      "playerQuantity": 21
     }
   ],
   "tournaments": [
@@ -13,26 +13,17 @@
       "id": 1,
       "fifaCode1": "BRA",
       "fifaCode2": "ARG",
-      "location": "sla",
-      "date": 26,
-      "time": "5:00 AM",
-      "local": "Av rui Barbosa"
+      "location": "Av Rui Barbosa",
+      "date": "19/05/2026",
+      "time": "19:00 "
     },
     {
       "id": 2,
       "fifaCode1": "BRA",
-      "fifaCode2": "yuyuyiu",
-      "location": "",
-      "date": "yuiyuiyui",
-      "time": "yuiyuyi"
-    },
-    {
-      "id": 3,
-      "fifaCode1": "uiu",
-      "fifaCode2": "uoioiui",
-      "location": "uoioiu",
-      "date": "iuoui",
-      "time": "uoiiu"
+      "fifaCode2": "FRA",
+      "location": "amusenment park",
+      "date": "18/10/2026",
+      "time": "19:30"
     }
   ]
 }
