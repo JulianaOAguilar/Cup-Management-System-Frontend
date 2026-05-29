@@ -1,61 +1,142 @@
 <div class="container mt-4">
 
-    <!-- TÍTULO -->
-    <h2 class="text-green-custom text-center fw-bold mb-3">
-          {{ isEditMode ? 'Edit Tournament' : ' Register New Tournament' }}
+  <!-- TÍTULO -->
+  <h2 class="text-green-custom text-center fw-bold mb-3">
+    {{ isEditMode ? 'Edit Tournament' : 'Register New Tournament' }}
+  </h2>
 
-    </h2>
+  <!-- CONTAINER DO FORM -->
+  <div class="bg-light border rounded p-4 shadow">
 
-    <!-- CONTAINER DO FORM -->
-    <div class="bg-light border rounded p-4 rounded-2 shadow">
+    <form [formGroup]="formGroupTournaments">
 
-        <form [formGroup]="formGroupTournaments">
+      <!-- LINHA 1 -->
+      <div class="row mb-3">
 
-            <!-- LINHA 1 -->
-            <div class="row mb-3">
+        <!-- TEAM 1 -->
+        <div class="col-md-6">
+          <label class="form-label">Team 1</label>
 
-                <div class="col-md-6">
-                    <label class="form-label">Team 1</label>
-                    <input type="text" class="form-control" formControlName="fifaCode1" placeholder="Enter Team 1 FIFA code">
-                </div>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="fifaCode1"
+            placeholder="Enter Team 1 FIFA Code">
 
-                <div class="col-md-6">
-                    <label class="form-label">Team 2</label>
-                    <input type="text" class="form-control" formControlName="fifaCode2" placeholder="Enter Team 2 FIFA Code">
-                </div>
-            </div>
+          <div
+            class="text-danger mt-1 small"
+            *ngIf="formGroupTournaments.get('fifaCode1')?.touched">
 
-<div class="row mb-3">
+            <span *ngIf="formGroupTournaments.get('fifaCode1')?.hasError('required')">
+              FIFA Code is required
+            </span>
 
-  <!-- DATE (MENOR) -->
-  <div class="col-md-3">
-    <label class="form-label">Date</label>
-    <input type="text" class="form-control" formControlName="date">
+            <span *ngIf="formGroupTournaments.get('fifaCode1')?.hasError('pattern')">
+              FIFA Code must contain exactly 3 letters
+            </span>
+          </div>
+        </div>
+
+        <!-- TEAM 2 -->
+        <div class="col-md-6">
+          <label class="form-label">Team 2</label>
+
+          <input
+            type="text"
+            class="form-control"
+            formControlName="fifaCode2"
+            placeholder="Enter Team 2 FIFA Code">
+
+          <div
+            class="text-danger mt-1 small"
+            *ngIf="formGroupTournaments.get('fifaCode2')?.touched">
+
+            <span *ngIf="formGroupTournaments.get('fifaCode2')?.hasError('required')">
+              FIFA Code is required
+            </span>
+
+            <span *ngIf="formGroupTournaments.get('fifaCode2')?.hasError('pattern')">
+              FIFA Code must contain exactly 3 letters
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- LINHA 2 -->
+      <div class="row mb-3">
+
+        <!-- DATE -->
+        <div class="col-md-3">
+          <label class="form-label">Date</label>
+
+          <input
+            type="date"
+            class="form-control"
+            formControlName="date">
+
+          <div
+            class="text-danger mt-1 small"
+            *ngIf="formGroupTournaments.get('date')?.touched &&
+                   formGroupTournaments.get('date')?.hasError('required')">
+
+            Date is required
+          </div>
+        </div>
+
+        <!-- LOCATION -->
+        <div class="col-md-5">
+          <label class="form-label">Location</label>
+
+          <input
+            type="text"
+            class="form-control"
+            formControlName="location"
+            placeholder="Enter tournament location">
+
+          <div
+            class="text-danger mt-1 small"
+            *ngIf="formGroupTournaments.get('location')?.touched &&
+                   formGroupTournaments.get('location')?.hasError('required')">
+
+            Location is required
+          </div>
+        </div>
+
+        <!-- START TIME -->
+        <div class="col-md-4">
+          <label class="form-label">Start Time</label>
+
+          <input
+            type="time"
+            class="form-control"
+            formControlName="time">
+
+          <div
+            class="text-danger mt-1 small"
+            *ngIf="formGroupTournaments.get('time')?.touched &&
+                   formGroupTournaments.get('time')?.hasError('required')">
+
+            Start time is required
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTÃO -->
+      <div class="d-flex justify-content-center mt-5">
+        <button
+  type="submit"
+  class="btn btn-outline-green-custom px-4"
+  (click)="save()"
+  [disabled]="formGroupTournaments.invalid">
+
+  {{ isEditMode ? 'Edit Tournament' : 'Register Tournament' }}
+</button>
+      </div>
+
+    </form>
+
   </div>
 
-  <!-- LOCAL (MAIOR) -->
-  <div class="col-md-5">
-    <label class="form-label">Local</label>
-    <input type="text" class="form-control" formControlName="location" placeholder="Enter the Tournament local">
-  </div>
-
-  <!-- START TIME (MAIOR) -->
-  <div class="col-md-4">
-    <label class="form-label">Start time</label>
-    <input type="text" class="form-control" formControlName="time">
-  </div>
-
-</div>
-
-            <!-- BOTÃO CENTRALIZADO -->
-            <div class="d-flex justify-content-center mt-5">
-                <button (click)="save()" type="submit" class="btn btn-outline-green-custom px-4">
-  {{ isEditMode ? 'Edit Tournament' : ' Register Tournament' }}
-
-                </button>
-            </div>
-
-        </form>
-
-    </div>
 </div>

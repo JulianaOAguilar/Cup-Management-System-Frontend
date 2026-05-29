@@ -10,32 +10,55 @@ import { TournamentService } from '../../services/tournament-service';
   templateUrl: './home-component.html',
   styleUrl: './home-component.css',
 })
-export class HomeComponent implements OnInit
- {
+export class HomeComponent implements OnInit {
 
+  // Signals
   Tournaments = signal<Tournament[]>([]);
   Teams = signal<Team[]>([]);
 
-  constructor(
-  private teamService: TeamService,
-  private tournamentService: TournamentService
-) {}
+  // Próximo jogo
+  nextTournament?: Tournament;
 
+  constructor(
+    private teamService: TeamService,
+    private tournamentService: TournamentService
+  ) {}
 
   ngOnInit(): void {
-     this.teamService.getAllTeams().subscribe(data => {
-    this.Teams.set(data);
-  });
 
-  this.tournamentService.getAllTournaments().subscribe(data => {
-    this.Tournaments.set(data);
-  });
+    // 🔹 Carrega times
+    this.teamService.getAllTeams().subscribe({
+      next: (data) => {
+        this.Teams.set(data);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar teams:', err);
+      }
+    });
+
+    // 🔹 Carrega torneios + calcula próximo jogo
+    this.tournamentService.getAllTournaments().subscribe({
+      next: (data) => {
+
+        this.Tournaments.set(data);
+
+        const now = new Date();
+
+        const futureTournaments = data
+          .filter(t => new Date(t.date + 'T00:00:00') >= now)
+          .sort((a, b) =>
+            new Date(a.date + 'T00:00:00').getTime() -
+            new Date(b.date + 'T00:00:00').getTime()
+          );
+
+        this.nextTournament = futureTournaments[0] ?? null;
+
+      },
+      error: (err) => {
+        console.error('Erro ao carregar tournaments:', err);
+      }
+    });
+
   }
 
-
-  
-
-
 }
-  
-

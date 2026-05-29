@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-
+import { Validators } from '@angular/forms';
 import { Team } from '../../../models/TeamInterface';
 import { TeamService } from '../../../services/team-service';
 
@@ -30,10 +30,26 @@ export class TeamFormComponent implements OnInit {
 
     this.formGroupTeams = this.formBuilder.group({
       id: [''],
-      country: [''],
-      fifaCode: [''],
-      coach: [''],
-      playerQuantity: ['']
+      country: ['', Validators.required],
+
+      fifaCode: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[A-Za-z]{3}$') // exatamente 3 letras
+        ]
+      ],
+
+      coach: ['', Validators.required],
+
+      playerQuantity: [
+        '',
+        [
+          Validators.required,
+          Validators.min(7), // mínimo de jogadores
+          Validators.pattern('^[0-9]+$') // apenas números
+        ]
+      ]
     });
 
   }
@@ -87,7 +103,7 @@ export class TeamFormComponent implements OnInit {
         next: (json: Team) => {
           this.Teams.update(t => [...t, json]);
           this.formGroupTeams.reset();
-                   Swal.fire({
+          Swal.fire({
             icon: 'success',
             title: 'Team Created Succesfully!',
             confirmButtonText: 'OK'

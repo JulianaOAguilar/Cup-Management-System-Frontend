@@ -3,9 +3,9 @@
     <!-- TÍTULO -->
     <h2 class="text-green-custom text-center fw-bold mb-3">
         <h2>
-  {{ isEditMode ? 'Edit team' : ' Register New Team' }}
-</h2>
-       
+            {{ isEditMode ? 'Edit team' : ' Register New Team' }}
+        </h2>
+
     </h2>
 
     <!-- CONTAINER DO FORM -->
@@ -17,15 +17,28 @@
             <div class="row mb-3">
 
                 <div class="col-md-6">
-                    <label class="form-label">Country Name</label>
-                    <input type="text" formControlName="country" class="form-control" placeholder="Enter country name">
+                    <label class="form-label">Country</label>
+
+                    <input type="text" formControlName="country" class="form-control" placeholder="Enter country">
+
+                    <div class="text-danger mt-1 small" *ngIf="formGroupTeams.get('country')?.touched &&
+                formGroupTeams.get('country')?.hasError('required')">
+
+                        Country is required
+                    </div>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Coach Name</label>
-                    <input type="text" formControlName="coach" class="form-control" placeholder="Enter coach name">
-                </div>
 
+                    <input type="text" formControlName="coach" class="form-control" placeholder="Enter Coach Name">
+
+                    <div class="text-danger mt-1 small" *ngIf="formGroupTeams.get('coach')?.touched &&
+                formGroupTeams.get('coach')?.hasError('required')">
+
+                        Coach Name is required
+                    </div>
+                </div>
             </div>
 
             <!-- LINHA 2 -->
@@ -36,21 +49,39 @@
                 <div class="col-md-6">
                     <label class="form-label">FIFA Code</label>
                     <input type="text" formControlName="fifaCode" class="form-control" placeholder="Enter FIFA code">
+
+                    <div class="text-danger" *ngIf="formGroupTeams.get('fifaCode')?.touched &&
+            formGroupTeams.get('fifaCode')?.invalid">
+
+                        FIFA Code must have exactly 3 letters
+
+                    </div>
+
                 </div>
 
 
                 <div class="col-md-6">
                     <label class="form-label">Players Quantity</label>
-                    <input type="number" formControlName="playerQuantity" class="form-control" placeholder="Enter number of players">
+
+                    <input type="number" formControlName="playerQuantity" class="form-control"
+                        placeholder="Enter number of players">
+
+                    <div class="text-danger mt-1" *ngIf="formGroupTeams.get('playerQuantity')?.touched &&
+                formGroupTeams.get('playerQuantity')?.invalid">
+
+                        Minimum players allowed: 7
+
+                    </div>
                 </div>
 
             </div>
 
             <!-- BOTÃO CENTRALIZADO -->
             <div class="d-flex justify-content-center mt-5">
-                <button (click)="save()" type="submit" class="btn btn-outline-green-custom px-4">
-                    
-  {{ isEditMode ? 'Edit Team' : 'Register Team' }}
+                <button (click)="save()" type="submit" class="btn btn-outline-green-custom px-4"
+                    [disabled]="formGroupTeams.invalid">
+
+                    {{ isEditMode ? 'Edit Team' : 'Register Team' }}
                 </button>
             </div>
 

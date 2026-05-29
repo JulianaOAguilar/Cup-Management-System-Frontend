@@ -2,44 +2,28 @@
   "teams": [
     {
       "id": 1,
-      "country": "",
-      "fifaCode": "",
-      "coach": "",
-      "playerQuantity": ""
+      "country": "Brazil",
+      "fifaCode": "BRA",
+      "coach": "enzo kevin",
+      "playerQuantity": 30
     }
   ],
   "tournaments": [
     {
+      "id": 1,
+      "fifaCode1": "BRA",
+      "fifaCode2": "ARG",
+      "location": "ghfjdskolkdjnhbf",
+      "date": "2026-06-18",
+      "time": "19:00"
+    },
+    {
       "id": 2,
       "fifaCode1": "BRA",
-      "fifaCode2": "FRA",
-      "location": "amusenment park",
-      "date": "18/10/2026",
-      "time": "19:30"
-    },
-    {
-      "id": 3,
-      "fifaCode1": "yuiy",
-      "fifaCode2": "yuiyuiy",
-      "location": "uiyu",
-      "date": "yiuyui",
-      "time": "yiuyui"
-    },
-    {
-      "id": 4,
-      "fifaCode1": "",
-      "fifaCode2": "",
-      "location": "",
-      "date": "",
-      "time": ""
-    },
-    {
-      "id": 5,
-      "fifaCode1": "",
-      "fifaCode2": "",
-      "location": "",
-      "date": "",
-      "time": ""
+      "fifaCode2": "ARG",
+      "location": "anfijdk",
+      "date": "2026-01-19",
+      "time": "19:00"
     }
   ]
 }

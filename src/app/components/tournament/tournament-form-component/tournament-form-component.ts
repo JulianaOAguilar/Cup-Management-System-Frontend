@@ -4,6 +4,7 @@ import { TournamentService } from '../../../services/tournament-service';
 import { Tournament } from '../../../models/TournamentInterface';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Validators } from '@angular/forms';
 
 
 @Component({
@@ -28,11 +29,24 @@ export class TournamentFormComponent implements OnInit {
 
   this.formGroupTournaments = formBuilder.group({ 
     id: [''],
-    fifaCode1: [''],
-    fifaCode2: [''],
-    location: [''],
-    date: [''],
-    time: ['']
+    fifaCode1: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[A-Za-z]{3}$') // exatamente 3 letras
+        ]
+      ],
+
+    fifaCode2: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[A-Za-z]{3}$') // exatamente 3 letras
+        ]
+      ],
+    location: ['', Validators.required],
+    date: ['', Validators.required],
+    time: ['', Validators.required]
     });
 
   }
