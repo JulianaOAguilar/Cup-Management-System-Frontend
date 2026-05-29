@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TournamentService } from '../../../services/tournament-service';
 import { Tournament } from '../../../models/TournamentInterface';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -58,11 +59,17 @@ export class TournamentFormComponent implements OnInit {
   save(): void {
 
     if (this.isEditMode) {
-
-      this.service.update(this.tournamentId!, this.formGroupTournaments.value).subscribe({
+this.service.update(this.tournamentId!, this.formGroupTournaments.value).subscribe({
         next: () => {
-          console.log('Torneio atualizado com sucesso');
-          this.router.navigate(['/tournaments']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Tournament Updated Succesfully!',
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/tournaments']);
+            }
+          });
         },
         error: (err) => {
           console.error('Erro ao atualizar:', err);
@@ -75,6 +82,17 @@ export class TournamentFormComponent implements OnInit {
         next: (json: Tournament) => {
           this.Tournaments.update(t => [...t, json]);
           this.formGroupTournaments.reset();
+          Swal.fire({
+            icon: 'success',
+            title: 'Tournament Created Succesfully!',
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/tournaments']);
+            }
+          });
+
+          
           
         },
         error: (err) => {

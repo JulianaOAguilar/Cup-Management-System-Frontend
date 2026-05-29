@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 import { Team } from '../../../models/TeamInterface';
 import { TeamService } from '../../../services/team-service';
@@ -65,7 +66,15 @@ export class TeamFormComponent implements OnInit {
       this.service.update(this.teamId!, this.formGroupTeams.value).subscribe({
         next: () => {
           console.log('Time atualizado com sucesso');
-          this.router.navigate(['/teams']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Team Updated Succesfully!',
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/teams']);
+            }
+          });
         },
         error: (err) => {
           console.error('Erro ao atualizar:', err);
@@ -78,11 +87,21 @@ export class TeamFormComponent implements OnInit {
         next: (json: Team) => {
           this.Teams.update(t => [...t, json]);
           this.formGroupTeams.reset();
-          
+                   Swal.fire({
+            icon: 'success',
+            title: 'Team Created Succesfully!',
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/teams']);
+            }
+          });
+
         },
         error: (err) => {
           console.error('Erro ao salvar:', err);
         }
+
       });
 
     }

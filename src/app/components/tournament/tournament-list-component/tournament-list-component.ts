@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { TournamentService } from '../../../services/tournament-service';
 import { Tournament } from '../../../models/TournamentInterface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tournament-list-component',
@@ -24,15 +25,54 @@ export class TournamentListComponent implements OnInit {
     );
   }
 
-     delete(tournaments: Tournament) {
-      this.service.delete(tournaments).subscribe(
-        {
-          next: () => {
-            this.tournament.update(tournament => tournament.filter(t => t.id != tournaments.id));
-          }
-        }
-      )
-  }
+   delete(tournament: Tournament) {
+   
+     Swal.fire({
+       title: 'Are you sure?',
+       text: "This action cannot be undone!",
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#d33',
+       cancelButtonColor: '#3085d6',
+       confirmButtonText: 'Yes, delete it!',
+       cancelButtonText: 'Cancel'
+     }).then((result) => {
+   
+       if (result.isConfirmed) {
+   
+         this.service.delete(tournament).subscribe({
+   
+           next: () => {
+   
+             this.tournament.update(list =>
+               list.filter(t => t.id !== tournament.id)
+             );
+   
+             Swal.fire({
+               icon: 'success',
+               title: 'Deleted!',
+               text: 'Team has been removed.'
+             });
+   
+           },
+   
+           error: () => {
+   
+             Swal.fire({
+               icon: 'error',
+               title: 'Error!',
+               text: 'Could not delete team.'
+             });
+   
+           }
+   
+         });
+   
+       }
+   
+     });
+   
+   }
 
 
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { TeamService } from '../../../services/team-service';
 import { Team } from '../../../models/TeamInterface';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -12,29 +13,68 @@ import { Team } from '../../../models/TeamInterface';
 export class TeamListComponent implements OnInit {
 
   teams = signal<Team[]>([]);
-constructor(private service: TeamService) { //usa injeção de dependências para
-  //utilizar o formbuilder dentro do constructor
+  constructor(private service: TeamService) { //usa injeção de dependências para
+    //utilizar o formbuilder dentro do constructor
 
 
-       
-  
-}
+
+
+  }
   ngOnInit(): void {
-   this.service.getAllTeams().subscribe(
+    this.service.getAllTeams().subscribe(
       {
         next: json => this.teams.set(json)
       }
     );
 
   }
+delete(team: Team) {
 
-   delete(team: Team) {
-    this.service.delete(team).subscribe(
-      {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "This action cannot be undone!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#FCD400;',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      this.service.delete(team).subscribe({
+
         next: () => {
-          this.teams.update(teams => teams.filter(t => t.id != team.id));
+
+          this.teams.update(list =>
+            list.filter(t => t.id !== team.id)
+          );
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'Team has been removed.'
+          });
+
+        },
+
+        error: () => {
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Could not delete team.'
+          });
+
         }
-      }
-    )
+
+      });
+
+    }
+
+  });
+
 }
+
 }
