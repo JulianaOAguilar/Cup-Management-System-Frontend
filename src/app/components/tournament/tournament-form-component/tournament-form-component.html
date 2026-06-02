@@ -14,52 +14,44 @@
       <div class="row mb-3">
 
         <!-- TEAM 1 -->
-        <div class="col-md-6">
-          <label class="form-label">Team 1</label>
+       <div class="col-md-6">
+  <label class="form-label">Team 1</label>
 
-          <input
-            type="text"
-            class="form-control"
-            formControlName="fifaCode1"
-            placeholder="Enter Team 1 FIFA Code">
+  <select
+    class="form-select"
+    formControlName="team1Id">
 
-          <div
-            class="text-danger mt-1 small"
-            *ngIf="formGroupTournaments.get('fifaCode1')?.touched">
+    <option value="">Select Team 1</option>
 
-            <span *ngIf="formGroupTournaments.get('fifaCode1')?.hasError('required')">
-              FIFA Code is required
-            </span>
+    <option
+      *ngFor="let team of Teams()"
+      [value]="team.id">
 
-            <span *ngIf="formGroupTournaments.get('fifaCode1')?.hasError('pattern')">
-              FIFA Code must contain exactly 3 letters
-            </span>
-          </div>
-        </div>
+      {{ team.country }} ({{ team.fifaCode }})
+    </option>
+
+  </select>
+</div>
 
         <!-- TEAM 2 -->
         <div class="col-md-6">
-          <label class="form-label">Team 2</label>
+  <label class="form-label">Team 2</label>
 
-          <input
-            type="text"
-            class="form-control"
-            formControlName="fifaCode2"
-            placeholder="Enter Team 2 FIFA Code">
+  <select
+    class="form-select"
+    formControlName="team2Id">
 
-          <div
-            class="text-danger mt-1 small"
-            *ngIf="formGroupTournaments.get('fifaCode2')?.touched">
+    <option value="">Select Team 2</option>
 
-            <span *ngIf="formGroupTournaments.get('fifaCode2')?.hasError('required')">
-              FIFA Code is required
-            </span>
+    <option
+      *ngFor="let team of Teams()"
+      [value]="team.id">
 
-            <span *ngIf="formGroupTournaments.get('fifaCode2')?.hasError('pattern')">
-              FIFA Code must contain exactly 3 letters
-            </span>
-          </div>
-        </div>
+      {{ team.country }} ({{ team.fifaCode }})
+    </option>
+
+  </select>
+</div>
 
       </div>
 

@@ -1,10 +1,12 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, Signal, signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TournamentService } from '../../../services/tournament-service';
 import { Tournament } from '../../../models/TournamentInterface';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Validators } from '@angular/forms';
+import { TeamService } from '../../../services/team-service';
+import { Team } from '../../../models/TeamInterface';
 
 
 @Component({
@@ -19,29 +21,32 @@ export class TournamentFormComponent implements OnInit {
   tournamentId?: number;
 
   Tournaments = signal<Tournament[]>([]);
+  Teams = signal<Team[]>([]);
+
+
   formGroupTournaments: FormGroup; // criando um formGroup
   
   constructor(private formBuilder: FormBuilder, 
-    private service: TournamentService,
+    private service: TournamentService, 
      private route: ActivatedRoute,
-    private router: Router) { //usa injeção de dependências para
+    private router: Router,
+    private TeamService: TeamService
+  ) { //usa injeção de dependências para
   //utilizar o formbuilder dentro do constructor
 
   this.formGroupTournaments = formBuilder.group({ 
     id: [''],
-    fifaCode1: [
+    team1Id: [
         '',
         [
           Validators.required,
-          Validators.pattern('^[A-Za-z]{3}$') // exatamente 3 letras
         ]
       ],
 
-    fifaCode2: [
+    team2Id: [
         '',
         [
           Validators.required,
-          Validators.pattern('^[A-Za-z]{3}$') // exatamente 3 letras
         ]
       ],
     location: ['', Validators.required],
@@ -51,7 +56,16 @@ export class TournamentFormComponent implements OnInit {
 
   }
    ngOnInit(): void {
- 
+
+    this.TeamService.getAllTeams().subscribe({
+  next: (teams) => {
+    this.Teams.set(teams);
+  },
+  error: (err) => {
+    console.error('Erro ao carregar times:', err);
+  }
+});
+
      const idParam = this.route.snapshot.paramMap.get('id');
  
      if (idParam) {
@@ -71,6 +85,18 @@ export class TournamentFormComponent implements OnInit {
      }
    }
   save(): void {
+
+    const { team1Id, team2Id } = this.formGroupTournaments.value;
+
+if (team1Id === team2Id) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Invalid Match',
+    text: 'A team cannot play against itself.'
+  });
+  return;
+}
+
 
     if (this.isEditMode) {
 this.service.update(this.tournamentId!, this.formGroupTournaments.value).subscribe({

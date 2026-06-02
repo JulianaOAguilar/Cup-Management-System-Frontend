@@ -7,6 +7,9 @@ import { Team } from '../models/TeamInterface';
   providedIn: 'root',
 })
 export class TeamService {
+  getAll() {
+    throw new Error('Method not implemented.');
+  }
   apiUrl = "http://localhost:3000/teams";
 
 

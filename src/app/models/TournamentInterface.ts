@@ -1,7 +1,7 @@
 export interface Tournament {
-  id: number;
-  fifaCode1: string;
-  fifaCode2: string;
+  id?: number;
+  team1Id: number;
+  team2Id: number;
   location: string;
   date: string;
   time: string;

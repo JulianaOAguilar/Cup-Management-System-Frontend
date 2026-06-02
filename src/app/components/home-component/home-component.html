@@ -82,7 +82,13 @@
           <div *ngIf="nextTournament; else noTournament">
 
             <p class="fw-bold mb-2">
-              {{ nextTournament.fifaCode1 }} vs {{ nextTournament.fifaCode2 }}
+              <ng-container *ngIf="nextTournament">
+
+  {{ getTeamName(nextTournament.team1Id) }}
+  vs
+  {{ getTeamName(nextTournament.team2Id) }}
+
+</ng-container>
             </p>
 
             <p class="text-muted mb-0">

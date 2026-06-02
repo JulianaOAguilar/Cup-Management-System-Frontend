@@ -19,6 +19,11 @@ export class HomeComponent implements OnInit {
   // Próximo jogo
   nextTournament?: Tournament;
 
+  getTeamName(id: number | string): string {
+  return this.Teams().find(t => t.id === Number(id))?.country ?? '';
+}
+
+
   constructor(
     private teamService: TeamService,
     private tournamentService: TournamentService
