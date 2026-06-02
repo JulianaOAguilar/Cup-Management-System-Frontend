@@ -4,7 +4,7 @@
       "id": 1,
       "country": "Brazil",
       "fifaCode": "BRA",
-      "coach": "enzo kevin",
+      "coach": "Enzo Kevin",
       "playerQuantity": 30
     },
     {
@@ -13,6 +13,27 @@
       "fifaCode": "ARG",
       "coach": "Fred",
       "playerQuantity": 19
+    },
+    {
+      "id": 3,
+      "country": "France",
+      "fifaCode": "FRA",
+      "coach": "Didier",
+      "playerQuantity": 26
+    },
+    {
+      "id": 4,
+      "country": "Germany",
+      "fifaCode": "GER",
+      "coach": "Hans",
+      "playerQuantity": 28
+    },
+    {
+      "id": 5,
+      "country": "Portugal",
+      "fifaCode": "POR",
+      "coach": "Roberto Martinez",
+      "playerQuantity": 24
     }
   ],
   "tournaments": [
@@ -20,33 +41,17 @@
       "id": 1,
       "team1Id": "1",
       "team2Id": "2",
-      "location": "ghfjdskolkdjnhbf",
+      "location": "Maracanã Stadium",
       "date": "2026-06-18",
       "time": "19:00"
     },
     {
       "id": 2,
-      "team1Id": "1",
-      "team2Id": "2",
-      "location": "anfijdk",
-      "date": "2026-01-19",
-      "time": "19:00"
-    },
-    {
-      "id": 3,
-      "team1Id": "1",
-      "team2Id": "2",
-      "location": "7777",
-      "date": "7777-07-07",
-      "time": "07:07"
-    },
-    {
-      "id": 4,
-      "team1Id": "2",
-      "team2Id": "1",
-      "location": "77777",
-      "date": "0787-08-07",
-      "time": "07:07"
+      "team1Id": "3",
+      "team2Id": "5",
+      "location": "Stade de France",
+      "date": "2026-07-10",
+      "time": "21:00"
     }
   ]
 }

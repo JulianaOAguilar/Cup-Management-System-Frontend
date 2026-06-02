@@ -4,12 +4,41 @@
   color: white;
 }
 
+
+.hero-section {
+  position: relative;
+  background-image: url('app/assets/image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0, 50, 21, 0.85),
+    rgba(0, 50, 21, 0.55)
+  );
+  z-index: 1;
+}
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+
+
 .btn-green-custom:hover {
-  background-color: #000000;
+  background-color: #758d7f;
   color: #ffffff;
 }
 
 .text-green-custom {
+      transition: 0.2s ease;
+
   color: #003215;
 }
 
@@ -21,9 +50,27 @@
 }
 
 .btn-yellow-custom:hover {
-  background-color: #dac03e;
+  background-color: #9c8b36;
   color: black;
 }
+
+.btn-especial {
+  color: #ffffff;
+          transition: 0.2s ease;
+border-color: #ffffff;
+
+
+}
+
+.btn-especial:hover {
+  color: #ffffff;
+          transition: 0.2s ease;
+border-color: #ffffff;
+background-color: #758d7f;
+
+}
+
+
 
 .bg-green-custom {
   background-color: #003215;
@@ -38,7 +85,7 @@
 }
 
 .btn-outline-green-custom:hover {
-    background-color: #003215;
+    background-color: #758d7f;
     color: #ffffff;
     border-color: #000703;
 
