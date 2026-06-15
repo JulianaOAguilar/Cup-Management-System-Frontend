@@ -8,6 +8,7 @@
   <!-- CONTAINER DO FORM -->
   <div class="bg-light border rounded p-4 shadow">
 
+
     <form [formGroup]="formGroupTournaments">
 
       <!-- LINHA 1 -->
@@ -65,12 +66,12 @@
           <input
             type="date"
             class="form-control"
-            formControlName="date">
+            formControlName="matchDate">
 
           <div
             class="text-danger mt-1 small"
-            *ngIf="formGroupTournaments.get('date')?.touched &&
-                   formGroupTournaments.get('date')?.hasError('required')">
+            *ngIf="formGroupTournaments.get('matchDate')?.touched &&
+                   formGroupTournaments.get('matchDate')?.hasError('required')">
 
             Date is required
           </div>
@@ -102,12 +103,12 @@
           <input
             type="time"
             class="form-control"
-            formControlName="time">
+            formControlName="matchTime">
 
           <div
             class="text-danger mt-1 small"
-            *ngIf="formGroupTournaments.get('time')?.touched &&
-                   formGroupTournaments.get('time')?.hasError('required')">
+            *ngIf="formGroupTournaments.get('matchTime')?.touched &&
+                   formGroupTournaments.get('matchTime')?.hasError('required')">
 
             Start time is required
           </div>

@@ -7,7 +7,7 @@ import { Tournament } from '../models/TournamentInterface';
   providedIn: 'root',
 })
 export class TournamentService {
-    apiUrl = "http://localhost:3000/tournaments";
+    apiUrl = "http://localhost:8080/tournaments";
 
 
   constructor(private http: HttpClient) { }
@@ -19,16 +19,16 @@ export class TournamentService {
     return this.http.delete<void>(`${this.apiUrl}/${tournament.id}`);
   }
 
-     update(id: number, tournament: Tournament): Observable<Tournament> {
-      return this.http.put<Tournament>(`${this.apiUrl}/${id}`, tournament);
-    }
   
       getById(id: number): Observable<Tournament> {
       return this.http.get<Tournament>(`${this.apiUrl}/${id}`);
     }
   
+save(data: any) {
+  return this.http.post<any>('http://localhost:8080/tournaments', data);
+}
 
-    save(tournament: Tournament): Observable<Tournament> { // POST (CREATE/criar)
-    return this.http.post<Tournament>(this.apiUrl, tournament);
-  }
+update(id: number, data: any) {
+  return this.http.put<any>(`http://localhost:8080/tournaments/${id}`, data);
+}
 }

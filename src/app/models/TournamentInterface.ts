@@ -1,8 +1,13 @@
 export interface Tournament {
-  id?: number;
+  id: number;
+
   team1Id: number;
   team2Id: number;
+
+  team1Name: string;
+  team2Name: string;
+
   location: string;
-  date: string;
-  time: string;
+
+  matchDateTime: string;
 }

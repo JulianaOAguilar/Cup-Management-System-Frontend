@@ -10,7 +10,7 @@ export class TeamService {
   getAll() {
     throw new Error('Method not implemented.');
   }
-  apiUrl = "http://localhost:3000/teams";
+  apiUrl = "http://localhost:8080/teams";
 
 
   constructor(private http: HttpClient) { }

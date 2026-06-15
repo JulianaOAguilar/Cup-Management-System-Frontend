@@ -15,22 +15,23 @@
 
       <div class="d-flex justify-content-between align-items-center">
         <!-- INFO -->
-        <div>
-          <h5 class="mb-1 fw-bold">{{ getTeamName(t.team1Id) }} vs {{ getTeamName(t.team2Id) }} </h5>
+<div>
+<h5 class="mb-1 fw-bold">
+  {{ t.team1Name }} vs {{ t.team2Name }}
+</h5>
 
+  <small class="text-muted d-block">
+    {{ t.matchDateTime | date:'fullDate' }}
+  </small>
 
-          <small class="text-muted d-block">
-            {{ t.date | date:'fullDate' }}
-          </small>
+  <small class="text-muted d-block">
+    Location: {{ t.location }}
+  </small>
 
-          <small class="text-muted d-block">
-            Location: {{t.location}}
-          </small>
-
-          <small class="text-muted d-block">
-            Start Time: {{t.time}}
-          </small>
-        </div>
+  <small class="text-muted d-block">
+    Start Time: {{ t.matchDateTime | date:'shortTime' }}
+  </small>
+</div>
 
         <!-- BOTÕES -->
         <div class="d-flex gap-2">

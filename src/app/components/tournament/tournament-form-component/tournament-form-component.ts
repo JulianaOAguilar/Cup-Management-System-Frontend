@@ -1,143 +1,113 @@
-import { Component, OnInit, Signal, signal } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TournamentService } from '../../../services/tournament-service';
-import { Tournament } from '../../../models/TournamentInterface';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Validators } from '@angular/forms';
 import { TeamService } from '../../../services/team-service';
 import { Team } from '../../../models/TeamInterface';
-
+import { Tournament } from '../../../models/TournamentInterface';
 
 @Component({
   selector: 'app-tournament-form-component',
-  standalone: false,
   templateUrl: './tournament-form-component.html',
   styleUrl: './tournament-form-component.css',
+  standalone: false,
+
 })
 export class TournamentFormComponent implements OnInit {
 
   isEditMode = false;
   tournamentId?: number;
 
-  Tournaments = signal<Tournament[]>([]);
   Teams = signal<Team[]>([]);
 
+  formGroupTournaments!: FormGroup;
 
-  formGroupTournaments: FormGroup; // criando um formGroup
-  
-  constructor(private formBuilder: FormBuilder, 
-    private service: TournamentService, 
-     private route: ActivatedRoute,
+  constructor(
+    private fb: FormBuilder,
+    private service: TournamentService,
+    private route: ActivatedRoute,
     private router: Router,
-    private TeamService: TeamService
-  ) { //usa injeção de dependências para
-  //utilizar o formbuilder dentro do constructor
+    private teamService: TeamService
+  ) {
 
-  this.formGroupTournaments = formBuilder.group({ 
-    id: [''],
-    team1Id: [
-        '',
-        [
-          Validators.required,
-        ]
-      ],
+   this.formGroupTournaments = this.fb.group({
+  team1Id: ['', Validators.required],
+  team2Id: ['', Validators.required],
+  location: ['', Validators.required],
 
-    team2Id: [
-        '',
-        [
-          Validators.required,
-        ]
-      ],
-    location: ['', Validators.required],
-    date: ['', Validators.required],
-    time: ['', Validators.required]
+  matchDate: ['', Validators.required],
+  matchTime: ['', Validators.required],
+});
+  }
+
+  ngOnInit(): void {
+
+    this.teamService.getAllTeams().subscribe({
+      next: (teams: Team[]) => this.Teams.set(teams),
+      error: (err: any) => console.error(err)
     });
 
-  }
-   ngOnInit(): void {
+    const idParam = this.route.snapshot.paramMap.get('id');
 
-    this.TeamService.getAllTeams().subscribe({
-  next: (teams) => {
-    this.Teams.set(teams);
-  },
-  error: (err) => {
-    console.error('Erro ao carregar times:', err);
-  }
+    if (idParam) {
+      this.isEditMode = true;
+      this.tournamentId = Number(idParam);
+
+      this.service.getById(this.tournamentId).subscribe({
+        next: (t: any) => {
+
+this.formGroupTournaments.patchValue({
+  team1Id: t.team1Id,
+  team2Id: t.team2Id,
+  location: t.location,
+
+  matchDate: t.matchDateTime?.split('T')[0],
+  matchTime: t.matchDateTime?.split('T')[1]?.substring(0, 5)
 });
 
-     const idParam = this.route.snapshot.paramMap.get('id');
- 
-     if (idParam) {
- 
-       this.tournamentId = Number(idParam);
-       this.isEditMode = true;
- 
-       this.service.getById(this.tournamentId).subscribe({
-         next: (tournament: Tournament) => {
-           this.formGroupTournaments.patchValue(tournament);
-         },
-         error: (err) => {
-           console.error('Erro ao buscar time:', err);
-         }
-       });
- 
-     }
-   }
+        },
+        error: (err: any) => console.error(err)
+      });
+    }
+  }
+
   save(): void {
 
-    const { team1Id, team2Id } = this.formGroupTournaments.value;
+    const v = this.formGroupTournaments.value;
 
-if (team1Id === team2Id) {
-  Swal.fire({
-    icon: 'error',
-    title: 'Invalid Match',
-    text: 'A team cannot play against itself.'
-  });
+if (v.team1Id === v.team2Id) {
+  Swal.fire('Error', 'A team cannot play against itself.', 'error');
   return;
 }
 
+const matchDateTime = `${v.matchDate}T${v.matchTime}:00`;
+
+const payload = {
+  team1Id: Number(v.team1Id),
+  team2Id: Number(v.team2Id),
+  location: v.location,
+  matchDateTime
+};
 
     if (this.isEditMode) {
-this.service.update(this.tournamentId!, this.formGroupTournaments.value).subscribe({
+
+      this.service.update(this.tournamentId!, payload).subscribe({
         next: () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Tournament Updated Succesfully!',
-            confirmButtonText: 'OK'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.router.navigate(['/tournaments']);
-            }
-          });
+          Swal.fire('Success', 'Updated!', 'success');
+          this.router.navigate(['/tournaments']);
         },
-        error: (err) => {
-          console.error('Erro ao atualizar:', err);
-        }
+        error: (err: any) => console.error(err)
       });
 
     } else {
 
-      this.service.save(this.formGroupTournaments.value).subscribe({
-        next: (json: Tournament) => {
-          this.Tournaments.update(t => [...t, json]);
-          this.formGroupTournaments.reset();
-          Swal.fire({
-            icon: 'success',
-            title: 'Tournament Created Succesfully!',
-            confirmButtonText: 'OK'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.router.navigate(['/tournaments']);
-            }
-          });
-
-          
-          
+      this.service.save(payload).subscribe({
+        next: () => {
+          Swal.fire('Success', 'Created!', 'success');
+          this.router.navigate(['/tournaments']);
         },
-        error: (err) => {
-          console.error('Erro ao salvar:', err);
-        }
+        error: (err: any) => console.error(err)
       });
 
     }

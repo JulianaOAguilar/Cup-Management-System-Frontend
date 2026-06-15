@@ -12,17 +12,10 @@ import { TournamentService } from '../../services/tournament-service';
 })
 export class HomeComponent implements OnInit {
 
-  // Signals
   Tournaments = signal<Tournament[]>([]);
   Teams = signal<Team[]>([]);
 
-  // Próximo jogo
-  nextTournament?: Tournament;
-
-  getTeamName(id: number | string): string {
-  return this.Teams().find(t => t.id === Number(id))?.country ?? '';
-}
-
+  nextTournament: Tournament | null = null;
 
   constructor(
     private teamService: TeamService,
@@ -31,17 +24,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // 🔹 Carrega times
+    // 🔹 Teams
     this.teamService.getAllTeams().subscribe({
-      next: (data) => {
-        this.Teams.set(data);
-      },
-      error: (err) => {
-        console.error('Erro ao carregar teams:', err);
-      }
+      next: (data) => this.Teams.set(data),
+      error: (err) => console.error('Erro ao carregar teams:', err)
     });
 
-    // 🔹 Carrega torneios + calcula próximo jogo
+    // 🔹 Tournaments
     this.tournamentService.getAllTournaments().subscribe({
       next: (data) => {
 
@@ -50,20 +39,22 @@ export class HomeComponent implements OnInit {
         const now = new Date();
 
         const futureTournaments = data
-          .filter(t => new Date(t.date + 'T00:00:00') >= now)
+          .filter(t =>
+            new Date(t.matchDateTime) >= now
+          )
           .sort((a, b) =>
-            new Date(a.date + 'T00:00:00').getTime() -
-            new Date(b.date + 'T00:00:00').getTime()
+            new Date(a.matchDateTime).getTime() -
+            new Date(b.matchDateTime).getTime()
           );
 
         this.nextTournament = futureTournaments[0] ?? null;
-
       },
-      error: (err) => {
-        console.error('Erro ao carregar tournaments:', err);
-      }
+      error: (err) => console.error('Erro ao carregar tournaments:', err)
     });
 
   }
 
+  getTeamName(id: number | string): string {
+    return this.Teams().find(t => t.id === Number(id))?.country ?? '';
+  }
 }
