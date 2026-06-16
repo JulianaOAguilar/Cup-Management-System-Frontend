@@ -1,12 +1,11 @@
-
-
 <body class="d-flex flex-column min-vh-100">
-  <main class="flex-fill"> 
-     <app-header-component></app-header-component>
-     <router-outlet></router-outlet>
-  </main> <!-- conteúdo principal !-->
 
-  
-  
+  <app-header-component></app-header-component>
+
+  <main class="flex-fill" style="padding-top: 70px;">
+    <router-outlet></router-outlet>
+  </main>
+
   <app-footer-component></app-footer-component>
-</body> <!-- ele fora do main deixa o footer fixo !-->
+
+</body>

@@ -1,8 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Validators } from '@angular/forms';
 import { Team } from '../../../models/TeamInterface';
 import { TeamService } from '../../../services/team-service';
 
@@ -36,7 +35,7 @@ export class TeamFormComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern('^[A-Za-z]{3}$') // exatamente 3 letras
+          Validators.pattern('^[A-Za-z]{3}$') // 3 letras
         ]
       ],
 
@@ -46,12 +45,11 @@ export class TeamFormComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.min(7), // mínimo de jogadores
-          Validators.pattern('^[0-9]+$') // apenas números
+          Validators.min(7),
+          Validators.max(30)
         ]
       ]
     });
-
   }
 
   ngOnInit(): void {
@@ -69,57 +67,88 @@ export class TeamFormComponent implements OnInit {
         },
         error: (err) => {
           console.error('Erro ao buscar time:', err);
+          Swal.fire('Error', 'Failed to load team', 'error');
         }
       });
-
     }
   }
 
   save(): void {
 
-    if (this.isEditMode) {
-
-      this.service.update(this.teamId!, this.formGroupTeams.value).subscribe({
-        next: () => {
-          console.log('Time atualizado com sucesso');
-          Swal.fire({
-            icon: 'success',
-            title: 'Team Updated Succesfully!',
-            confirmButtonText: 'OK'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.router.navigate(['/teams']);
-            }
-          });
-        },
-        error: (err) => {
-          console.error('Erro ao atualizar:', err);
-        }
-      });
-
-    } else {
-
-      this.service.save(this.formGroupTeams.value).subscribe({
-        next: (json: Team) => {
-          this.Teams.update(t => [...t, json]);
-          this.formGroupTeams.reset();
-          Swal.fire({
-            icon: 'success',
-            title: 'Team Created Succesfully!',
-            confirmButtonText: 'OK'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.router.navigate(['/teams']);
-            }
-          });
-
-        },
-        error: (err) => {
-          console.error('Erro ao salvar:', err);
-        }
-
-      });
-
+    const v = this.formGroupTeams.value;
+    
+    
+    if (v.players < 7 || v.players > 30) {
+      Swal.fire(
+        'Invalid Players',
+        'Players must be between 7 and 30',
+        'error'
+      );
+      return;
     }
+
+   
+    if (this.formGroupTeams.invalid) {
+      this.formGroupTeams.markAllAsTouched();
+      Swal.fire(
+        'Invalid Form',
+        'Please fill all required fields correctly',
+        'error'
+      );
+      return;
+    }
+
+    const request$ = this.isEditMode
+      ? this.service.update(this.teamId!, v)
+      : this.service.save(v);
+
+    request$.subscribe({
+
+      next: (res: Team) => {
+
+        const successMessage = this.isEditMode
+          ? 'Team Updated Successfully!'
+          : 'Team Created Successfully!';
+
+        Swal.fire({
+          icon: 'success',
+          title: successMessage,
+          confirmButtonText: 'OK'
+        }).then(() => {
+          this.router.navigate(['/teams']);
+        });
+      },
+
+      error: (err: any) => {
+
+        const message = err.error?.message?.toLowerCase();
+
+        // 🔴 FIFA CODE DUPLICADO
+        if (message?.includes('fifa')) {
+          Swal.fire(
+            'FIFA Code already exists',
+            'Please choose another code',
+            'error'
+          );
+          return;
+        }
+
+        // 🔴 PLAYERS inválidos backend
+        if (message?.includes('players')) {
+          Swal.fire(
+            'Invalid Players',
+            err.error?.message,
+            'error'
+          );
+          return;
+        }
+
+        Swal.fire(
+          'Error',
+          err.error?.message || 'Unexpected error',
+          'error'
+        );
+      }
+    });
   }
 }
